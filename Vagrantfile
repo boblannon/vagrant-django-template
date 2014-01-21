@@ -8,10 +8,11 @@ Vagrant.configure('2') do |config|
 
     config.vm.network :forwarded_port, guest: 5432, host:5434
 
-    config.vm.synced_folder ".", "/home/vagrant/twitter_listener"
-
-    config.vm.provision :shell, :path => "etc/install/install.sh", :args => "twitter_listener"
+    config.vm.provision :shell, :path => "etc/install/install.sh", :args => "{{ project_name }}"
     
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+    config.vm.synced_folder ".", "/vagrant/{{ project_name }}"
+
     config.vm.provider :aws do |provider, override|
         override.vm.box = "aws-twitter-listener"
     end
