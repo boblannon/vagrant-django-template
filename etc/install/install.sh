@@ -6,12 +6,14 @@
 
 PROJECT_NAME=$1
 
+SU_HOME=/home/$SUDO_USER
+
 VAGRANT_HOME=/vagrant
 DB_NAME=$PROJECT_NAME
 VIRTUALENV_NAME=$PROJECT_NAME
 
 PROJECT_DIR=$VAGRANT_HOME/$PROJECT_NAME
-VIRTUALENV_DIR=$HOME/.virtualenvs/$PROJECT_NAME
+VIRTUALENV_DIR=$SU_HOME/.virtualenvs/$PROJECT_NAME
 
 PGSQL_VERSION=9.1
 
@@ -55,8 +57,9 @@ if [[ ! -f /usr/local/bin/virtualenv ]]; then
 fi
 
 # bash environment global setup
-cp -p $PROJECT_DIR/etc/install/bashrc $HOME/.bashrc
-mkdir -p $HOME/.pip_download_cache
+cp -p $PROJECT_DIR/etc/install/bashrc $SU_HOME/.bashrc
+mkdir -p $SU_HOME/.pip_download_cache
+chown -R $SUDO_USER:$SUDO_USER $SU_HOME
 
 # Node.js, CoffeeScript and LESS
 if ! command -v npm; then
@@ -105,10 +108,10 @@ createdb -Upostgres $DB_NAME
 # virtualenv setup for project
 /usr/local/bin/virtualenv $VIRTUALENV_DIR
 echo $PROJECT_DIR > $VIRTUALENV_DIR/.project
-PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache 
+PIP_DOWNLOAD_CACHE=$SU_HOME/.pip_download_cache 
 $VIRTUALENV_DIR/bin/pip install -r $PROJECT_DIR/requirements.txt
 
-echo "workon $VIRTUALENV_NAME" >> $HOME/.bashrc
+echo "workon $VIRTUALENV_NAME" >> $SU_HOME/.bashrc
 
 # Set execute permissions on manage.py, as they get lost if we build from a zip file
 chmod a+x $PROJECT_DIR/manage.py
