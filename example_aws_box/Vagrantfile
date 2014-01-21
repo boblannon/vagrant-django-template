@@ -1,0 +1,21 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = "your-access-key-id"
+    aws.secret_access_key = "your-secret-access-key"
+    aws.keypair_name = "keypair-name"
+    
+    aws.region = "us-east-1"
+
+    aws.ami = "ami-85gh54a"
+    aws.security_groups = ['blog', 's3_write']
+
+    aws.instance_type = "t1.micro"
+ 
+    override.ssh.username = "ubuntu"
+    override.ssh.private_key_path = "/path/to/your/keypair-name.pem"
+
+  end
+end
