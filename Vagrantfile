@@ -14,7 +14,7 @@ Vagrant.configure('2') do |config|
     config.vm.synced_folder ".", "/vagrant/{{ project_name }}"
 
     config.vm.provider :aws do |provider, override|
-        override.vm.box = "aws-twitter-listener"
+        override.vm.box = "aws_{{ project_name }}"
     end
 
 end
