@@ -5,8 +5,11 @@ import sys
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 
-# Modify sys.path to include the lib directory
-sys.path.append(os.path.join(PROJECT_ROOT, "lib"))
+# Modify sys.path to include the libs directory
+sys.path.append(os.path.join(PROJECT_ROOT, {{ project_name }}, "libs"))
+
+# Modify sys.path to include the apps directory
+sys.path.append(os.path.join(PROJECT_ROOT, {{ project_name }}, "apps"))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
