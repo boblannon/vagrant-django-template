@@ -33,6 +33,10 @@ wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | pyth
 apt-get install -y libjpeg62-dev zlib1g-dev libfreetype6-dev liblcms1-dev
 # Git (we'd rather avoid people keeping credentials for git commits in the repo, but sometimes we need it for pip requirements that aren't in PyPI)
 apt-get install -y git
+# Install nginx, start it, and set it to start on reboot
+apt-get install -y nginx
+service nginx start
+update-rc.d nginx defaults
 
 # Postgresql
 if ! command -v psql; then
@@ -70,6 +74,29 @@ if ! command -v lessc; then
 fi
 
 # ---
+
+# RabbitMQ install
+if ! command -v rabbitmqctl; then
+   apt-get install -y rabbitmq-server
+fi
+
+# Redis install
+if ! command -v redis-server; then
+   wget http://download.redis.io/redis-stable.tar.gz
+   tar xvzf redis-stable.tar.gz 
+   cd redis-stable
+   make 
+   cp src/redis-server /usr/local/bin/redis-server
+   cp src/redis-cli /usr/local/bin/redis-cli
+   mkdir /etc/redis
+   mkdir /var/redis
+   cp utils/redis_init_script /etc/init.d/redis_6379
+   cp -p $PROJECT_DIR/redis_6379.conf /etc/redis/6379.conf
+   mkdir /var/redis/6379
+   update-rc.d redis_6379 defaults
+   /etc/init.d/redis_6379 start
+   cd ..
+fi
 
 # postgresql setup for project
 createdb -Upostgres $DB_NAME
