@@ -10,16 +10,16 @@ ENVIRONMENT=$2
 
 SU_HOME=/home/$SUDO_USER
 
-VAGRANT_HOME=/vagrant
+V_HOME=/vagrant
 DB_NAME=$PROJECT_NAME
 VIRTUALENV_NAME=$PROJECT_NAME
 
-PROJECT_DIR=$VAGRANT_HOME/$PROJECT_NAME
+PROJECT_DIR=$V_HOME/$PROJECT_NAME
 VIRTUALENV_DIR=$SU_HOME/.virtualenvs/$PROJECT_NAME
 
 PGSQL_VERSION=9.1
 
-chown -R $SUDO_USER:$SUDO_USER $VAGRANT_HOME
+chown -R $SUDO_USER:$SUDO_USER $V_HOME
 
 # bash environment global setup
 cp -p $PROJECT_DIR/etc/install/etc-bash.bashrc /etc/bash.bashrc
@@ -53,7 +53,7 @@ if ! command -v psql; then
     apt-get install -y postgresql-$PGSQL_VERSION libpq-dev
     cp $PROJECT_DIR/etc/install/pg_hba.conf /etc/postgresql/$PGSQL_VERSION/main/
 chown -R $SUDO_USER:$SUDO_USER $SU_HOME
-chown -R $SUDO_USER:$SUDO_USER $VAGRANT_HOME
+chown -R $SUDO_USER:$SUDO_USER $V_HOME
     /etc/init.d/postgresql reload
 fi
 
