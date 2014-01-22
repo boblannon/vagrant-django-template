@@ -123,7 +123,9 @@ echo "workon $VIRTUALENV_NAME" >> $SU_HOME/.bashrc
 chmod a+x $PROJECT_DIR/manage.py
 
 # Django project setup
-su - $SUDO_USER -c "source $VIRTUALENV_DIR/bin/activate && \
+su - $SUDO_USER -c "source /usr/local/bin/virtualenvwrapper.sh && \
+    workon $VIRTUALENV_NAME && \
     add2virtualenv $PROJECT_DIR && \
-    django-admin.py syncdb --noinput --settings=settings.$ENVIRONMENT && \
-    django-admin.py migrate --settings=settings.$ENVIRONMENT"
+    django-admin.py syncdb --noinput --settings=$PROJECT_NAME.settings.$ENVIRONMENT && \
+    django-admin.py migrate --settings=$PROJECT_NAME.settings.$ENVIRONMENT && \
+    deactivate"
